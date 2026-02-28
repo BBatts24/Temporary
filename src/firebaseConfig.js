@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
+import { getDatabase } from "firebase/database";
 
 // Firebase configuration - Get these values from your Firebase console
 const firebaseConfig = {
@@ -17,6 +18,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 
 // Get Auth instance
-export const auth = getAuth(app);
-
 export default app;
+export const auth = getAuth(app);
+export const database = getDatabase(app);

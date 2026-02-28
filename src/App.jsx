@@ -2,6 +2,8 @@ import './App.css'
 import React, { useState } from 'react'
 import { auth } from './firebaseConfig'
 import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth'
+import { database } from "./firebaseConfig";
+import { ref, set } from "firebase/database";
 
 /*
 const apiKey = process.env.REACT_APP_GEMINI_KEY;
@@ -19,7 +21,7 @@ fetch(
 */
 
 function App() {
-  const [page, setPage] = useState(1);
+  //const [page, setPage] = useState(1);
   const [user, setUser] = useState(null);
 
   const handleGoogleLogin = async () => {
@@ -28,18 +30,23 @@ function App() {
       const result = await signInWithPopup(auth, provider);
       setUser(result.user);
       console.log('User info:', result.user);
-      setPage(2);
+      
+      await set(ref(database, 'users/' + result.user.uid), {
+      name: result.user.displayName,
+      email: result.user.email
+      });
+
     } catch (error) {
       console.error('Login error:', error);
       //alert('Login failed: ' + error.message);
     }
   };
 
+
   const handleLogout = async () => {
     try {
       await signOut(auth);
       setUser(null);
-      setPage(1);
     } catch (error) {
       console.error('Logout error:', error);
     }
