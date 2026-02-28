@@ -8,8 +8,10 @@ function App() {
         <h1 style={{ color: 'white' }}>Phishing Challenge!</h1>
       </header>
       <body>
-        <div>
-          <h2 style={{ color: 'black' }}>Hello Goog</h2>
+        <div className="card">
+          <h2>Hello!</h2>
+          <button className="button" onClick={() => null}>Start Challenge</button>
+          <h3>Click here to start the Phishing Challenge and test how well you can spot phishing emails.</h3>
         </div>
       </body>
       <footer className="fixed-footer" style={{ backgroundColor: 'black', textAlign: 'left', padding: '1rem' }}>  
