@@ -1,5 +1,6 @@
 #root {
-  max-width: 1280px;
+  max-width: 100%;
+  max-height: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -11,8 +12,17 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
+.fixed-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  filter: drop-shadow(0 0 2em #919191aa);
 }
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
@@ -38,5 +48,5 @@
 }
 
 .read-the-docs {
-  color: #888;
+  color: #ffffff;
 }
