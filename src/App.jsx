@@ -1,5 +1,5 @@
 import './App.css'
-import React, { useState } from 'react'
+import React, { useState, useEffect, use } from 'react'
 import { auth } from './firebaseConfig'
 import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth'
 import { database } from "./firebaseConfig";
@@ -24,6 +24,7 @@ function App() {
   //const [page, setPage] = useState(1);
   const [user, setUser] = useState(null);
   const [currentScore, setCurentScore] = useState(0);
+  const [highScore, setHighScore] = useState(0);
 
   const handleGoogleLogin = async () => {
     try {
@@ -34,7 +35,8 @@ function App() {
 
       await set(ref(database, 'users/' + result.user.uid), {
         name: result.user.displayName,
-        email: result.user.email
+        email: result.user.email,
+        score: 0
       });
 
     } catch (error) {
@@ -65,39 +67,57 @@ function App() {
       //alert('Login failed: ' + error.message);
     }
 
-    }
+  }
 
 
   const handleLogout = async () => {
-      try {
-        await signOut(auth);
-        setUser(null);
-      } catch (error) {
-        console.error('Logout error:', error);
-      }
-    };
-    return (
-      <div className="animBG">
-        <header className="fixed-header">
-          <h1 style={{ color: 'white', margin: 0 }}>Phishing Challenge!</h1>
-          {user ? (
-            <button className="button2" onClick={handleLogout}>Logout</button>
-          ) : (
-            <button className="button2" onClick={handleGoogleLogin}>Login</button>
-          )}
-        </header>
-        <div>
-          <div className="card">
-            <h2>Hello!</h2>
-            <button className="button" onClick={() => null}>Start Challenge</button>
-            <h3>Click here to start the Phishing Challenge and test how well you can spot phishing emails.</h3>
-          </div>
-        </div>
-        <footer className="fixed-footer" style={{ backgroundColor: 'black', textAlign: 'left', padding: '1rem' }}>
-          <h3 style={{ color: 'white' }}>Created by Philip Colborn, Alexander Chambers. Background by Manuel Pinto</h3>
-        </footer>
-      </div>
-    );
-  }
+    try {
+      await signOut(auth);
+      setUser(null);
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
 
-  export default App
+  useEffect(() => {
+    async function fetchData() {
+      if (user) {
+        const snapshot = await get(ref(database, 'users/' + user.uid));
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          setHighScore(data.score);
+        } else {
+          console.log("No data found");
+        }
+      }
+    }
+    fetchData();
+  }, [user]);
+  return (
+    <div className="animBG">
+      <header className="fixed-header">
+        <h1 style={{ color: 'white', margin: 0, justifyContent: 'right' }}>Phishing Challenge!</h1>
+        {user ? (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <p>Score: {highScore}</p>
+            <button className="button2" onClick={handleLogout}>Logout</button>
+          </div>
+        ) : (
+          <button className="button2" onClick={handleGoogleLogin}>Login</button>
+        )}
+      </header>
+      <div>
+        <div className="card">
+          <h2>Hello!</h2>
+          <button className="button" onClick={() => null}>Start Challenge</button>
+          <h3>Click here to start the Phishing Challenge and test how well you can spot phishing emails.</h3>
+        </div>
+      </div>
+      <footer className="fixed-footer" style={{ backgroundColor: 'black', textAlign: 'left', padding: '1rem' }}>
+        <h3 style={{ color: 'white' }}>Created by Philip Colborn, Alexander Chambers</h3>
+      </footer>
+    </div>
+  );
+}
+
+export default App
