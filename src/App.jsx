@@ -27,6 +27,7 @@ function App() {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       setUser(result.user);
+      console.log('User info:', result.user);
       setPage(2);
     } catch (error) {
       console.error('Login error:', error);
@@ -43,11 +44,15 @@ function App() {
       console.error('Logout error:', error);
     }
   };
-    return (
-    <body>
+  return (
+    <div className="animBG">
       <header className="fixed-header">
         <h1 style={{ color: 'white', margin: 0 }}>Phishing Challenge!</h1>
-        <button className="button2" onClick={handleGoogleLogin}>Login</button>
+        {user ? (
+          <button className="button2" onClick={handleLogout}>Logout</button>
+        ) : (
+          <button className="button2" onClick={handleGoogleLogin}>Login</button>
+        )}
       </header>
       <div>
         <div className="card">
@@ -56,13 +61,11 @@ function App() {
           <h3>Click here to start the Phishing Challenge and test how well you can spot phishing emails.</h3>
         </div>
       </div>
-      <footer className="fixed-footer" style={{ backgroundColor: 'black', textAlign: 'left', padding: '1rem' }}>  
+      <footer className="fixed-footer" style={{ backgroundColor: 'black', textAlign: 'left', padding: '1rem' }}>
         <h3 style={{ color: 'white' }}>Created by Philip Colborn, Alexander Chambers</h3>
       </footer>
-      <div> 
-      </div>
-    </body>
-    );
+    </div>
+  );
 }
 
 export default App
