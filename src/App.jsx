@@ -1,5 +1,7 @@
 //import { useState } from 'react'
 import './App.css'
+import React from 'react'
+import { useState } from 'react';
 
 /*
 const apiKey = process.env.REACT_APP_GEMINI_KEY;
@@ -17,11 +19,14 @@ fetch(
 */
 
 function App() {
+  const [page, setPage] = useState(1);
 
-  return (
-    <body style={{ backgroundColor: 'white' }}>
-      <header className="fixed-header" style={{ backgroundColor: 'black', textAlign: 'left', padding: '1rem' }}>
-        <h1 style={{ color: 'white' }}>Phishing Challenge!</h1>
+  if (page === 1) {
+    return (
+    <body className='AnimBG'>
+      <header className="fixed-header">
+        <h1 style={{ color: 'white', margin: 0 }}>Phishing Challenge!</h1>
+        <button className="button2" onClick={() => setPage(2)}>Login</button>
       </header>
       <body>
         <div className="card">
@@ -36,7 +41,12 @@ function App() {
       <div> 
       </div>
     </body>
-  )
+    );
+  } else if (page === 2) {
+    return (
+      <div></div>
+    );
+  }
 }
 
 export default App
