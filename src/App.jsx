@@ -4,21 +4,10 @@ import { auth } from './firebaseConfig'
 import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth'
 import { database } from "./firebaseConfig";
 import { ref, set, get } from "firebase/database";
-
-/*
-const apiKey = process.env.REACT_APP_GEMINI_KEY;
-
-fetch(
-  `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`,
-  {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents: [{ parts: [{ text: "Hello Gemini" }] }]
-    })
-  }
-);
-*/
+import { GoogleGenerativeAI } from "@google/generative-ai";
+const apiKey = import.meta.env.VITE_GEMINI_KEY;
+const ai = new GoogleGenerativeAI(apiKey);
+const model = ai.getGenerativeModel({ model: "gemini-2.5-flash" });
 
 function App() {
   //const [page, setPage] = useState(1);
@@ -44,6 +33,27 @@ function App() {
       //alert('Login failed: ' + error.message);
     }
   };
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState("");
+
+  async function createPhishingEmail() {
+    setLoading(true);
+
+    try {
+      const mail = await model.generateContent(
+        "Generate an email that is either a phishing email or a legitimate email."
+      );
+
+      const text = mail.response.text();
+      setEmail(text);
+      console.log(text);
+    } catch (err) {
+      console.error("Gemini error:", err);
+      setEmail("Error generating email.");
+    }
+
+    setLoading(false);
+  }
 
   const updateHighScore = async () => {
     let score;
