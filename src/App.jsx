@@ -1,7 +1,7 @@
-//import { useState } from 'react'
 import './App.css'
-import React from 'react'
-import { useState } from 'react';
+import React, { useState } from 'react'
+import { auth } from './firebaseConfig'
+import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth'
 
 /*
 const apiKey = process.env.REACT_APP_GEMINI_KEY;
@@ -20,21 +20,42 @@ fetch(
 
 function App() {
   const [page, setPage] = useState(1);
+  const [user, setUser] = useState(null);
 
-  if (page === 1) {
+  const handleGoogleLogin = async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      setUser(result.user);
+      setPage(2);
+    } catch (error) {
+      console.error('Login error:', error);
+      //alert('Login failed: ' + error.message);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut(auth);
+      setUser(null);
+      setPage(1);
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
     return (
-    <body className='AnimBG'>
+    <body>
       <header className="fixed-header">
         <h1 style={{ color: 'white', margin: 0 }}>Phishing Challenge!</h1>
-        <button className="button2" onClick={() => setPage(2)}>Login</button>
+        <button className="button2" onClick={handleGoogleLogin}>Login</button>
       </header>
-      <body>
+      <div>
         <div className="card">
           <h2>Hello!</h2>
           <button className="button" onClick={() => null}>Start Challenge</button>
           <h3>Click here to start the Phishing Challenge and test how well you can spot phishing emails.</h3>
         </div>
-      </body>
+      </div>
       <footer className="fixed-footer" style={{ backgroundColor: 'black', textAlign: 'left', padding: '1rem' }}>  
         <h3 style={{ color: 'white' }}>Created by Philip Colborn, Alexander Chambers</h3>
       </footer>
@@ -42,11 +63,6 @@ function App() {
       </div>
     </body>
     );
-  } else if (page === 2) {
-    return (
-      <div></div>
-    );
-  }
 }
 
 export default App
