@@ -1,0 +1,31 @@
+name: Deploy App
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: |
+          cd server
+          npm install
+
+      - name: Run server
+        run: |
+          cd server
+          node index.js
+        env:
+          GEMINI_API_KEY: ${{ secrets.HENHACKS_GEMBIGREDJEWEL }}
