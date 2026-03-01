@@ -165,7 +165,7 @@ function App() {
   return (
     <div className="animBG">
       <header className="fixed-header">
-        <h1 style={{ color: 'white', margin: 0, justifyContent: 'right' }}>Phishing Challenge!</h1>
+        <h1 style={{ color: 'white', margin: 0, justifyContent: 'right' }}>Phishing Fighter!</h1>
         {user ? (
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <p>Highest Score: {highestScore}</p>
@@ -184,8 +184,8 @@ function App() {
           <div>
             <div className="card">
               <h2>Hello!</h2>
-              <button className="button" onClick={createPhishingEmail}>Start Challenge</button>
-              <h3>Click here to start the Phishing Challenge and test how well you can spot phishing emails.</h3>
+              <button className="button" onClick={createPhishingEmail}>Start Fighting</button>
+              <h3>Click here to start the Phishing Fight and test how well you can spot phishing emails.</h3>
             </div>
           </div>
         ) : isLoading ? (
