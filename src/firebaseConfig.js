@@ -21,4 +21,3 @@ const app = initializeApp(firebaseConfig);
 export default app;
 export const auth = getAuth(app);
 export const database = getDatabase(app);
-export const KEY = firebaseConfig.GEMINI_KEY;
