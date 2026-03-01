@@ -28,4 +28,4 @@ jobs:
           cd server
           node index.js
         env:
-          GEMINI_API_KEY: ${{ secrets.HENHACKS_GEMBIGREDJEWEL }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_KEY }}
