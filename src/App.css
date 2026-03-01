@@ -40,8 +40,9 @@
 }
 
 .card {
-  width: 500px;
-  height: 300px;
+  max-width: 60%;
+  min-width: 100px;
+  min-height: 100px;
   margin: 2rem auto;
   padding: 2rem;
   text-align: center;
@@ -51,6 +52,7 @@
   background-color: white;
   box-shadow: 0 0 1rem #000000aa;
   color: black;
+  display:inline-block;
 }
 /*backgroundColor: 'lightgray', color: 'white', padding: '1rem', border: '3px solid white', borderRadius: '5px', cursor: 'pointer' */
 .button {

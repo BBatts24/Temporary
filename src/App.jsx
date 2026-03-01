@@ -5,7 +5,8 @@ import { signInWithPopup, GoogleAuthProvider, signOut } from 'firebase/auth'
 import { database } from "./firebaseConfig";
 import { ref, set, get } from "firebase/database";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-const apiKey = import.meta.env.VITE_GEMINI_KEY;
+
+const apiKey = import.meta.env.VITE_GEMINI_KEY
 const ai = new GoogleGenerativeAI(apiKey);
 const model = ai.getGenerativeModel({ model: "gemini-2.5-flash" });
 
@@ -14,6 +15,8 @@ function App() {
   const [user, setUser] = useState(null);
   const [currentScore, setCurentScore] = useState(0);
   const [highScore, setHighScore] = useState(0);
+  const [isLoading, setisLoading] = useState(false);
+  const [email, setEmail] = useState("");
 
   const handleGoogleLogin = async () => {
     try {
@@ -33,26 +36,43 @@ function App() {
       //alert('Login failed: ' + error.message);
     }
   };
-  const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
 
   async function createPhishingEmail() {
-    setLoading(true);
-
+    setisLoading(true);
+    const f = Math.random();
     try {
-      const mail = await model.generateContent(
-        "Generate an email that is either a phishing email or a legitimate email."
-      );
+      if (f < 0.5) {
+        const mail = await model.generateContent(
+          `Generate a professional looking phishing email that attempts to trick the user in some way. The email should be 150 words or less and be formatted like a real email with a subject line, greeting, body, and signature. 
+          Use made up names for people and companies. Never use the word phishing. Indent the email using spaces to make it look like a real email.
+          Use the following template:
+          Subject: [Subject Line]
 
-      const text = mail.response.text();
-      setEmail(text);
-      console.log(text);
-    } catch (err) {
-      console.error("Gemini error:", err);
+          From: [Sender Name] <[Sender Email]>
+          To: [Recipient Name] <[Recipient Email]>
+
+          [Body of the email]
+
+          [Signature]
+          
+          Replace [Subject Line], [Sender Name], [Sender Email], [Recipient Name], [Recipient Email], [Body of the email], and [Signature] with appropriate content for an email. The body should contain a call to action that attempts to trick the user in some way, such as asking them to click a link or provide personal information.
+          Use \\n to indicate new lines in the email.`
+
+        );
+        setEmail(mail.response.text());
+        console.log(mail.response.text());
+      } else {
+        const mail = await model.generateContent(
+          "Generate a legitimate email. The email should be 150 words or less and be formatted like a real email with a subject line, greeting, body, and signature."
+        );
+        setEmail(mail.response.text());
+        console.log(mail.response.text());
+      }
+    } catch (error) {
+      console.error("Gemini error:", error);
       setEmail("Error generating email.");
     }
-
-    setLoading(false);
+    setisLoading(false);
   }
 
   const updateHighScore = async () => {
@@ -117,11 +137,23 @@ function App() {
         )}
       </header>
       <div>
-        <div className="card">
-          <h2>Hello!</h2>
-          <button className="button" onClick={() => null}>Start Challenge</button>
-          <h3>Click here to start the Phishing Challenge and test how well you can spot phishing emails.</h3>
-        </div>
+        {!email && !isLoading ? (
+          <div>
+            <div className="card">
+              <h2>Hello!</h2>
+              <button className="button" onClick={createPhishingEmail}>Start Challenge</button>
+              <h3>Click here to start the Phishing Challenge and test how well you can spot phishing emails.</h3>
+            </div>
+          </div>
+        ) : isLoading ? (
+          <div className="card">
+            <p>Loading...</p>
+          </div>
+        ) : (
+          <div className="card">
+            <p>{email}</p>
+          </div>
+        )}
       </div>
       <footer className="fixed-footer" style={{ backgroundColor: 'black', textAlign: 'left', padding: '1rem' }}>
         <h3 style={{ color: 'white' }}>Created by Philip Colborn, Alexander Chambers</h3>

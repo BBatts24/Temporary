@@ -11,7 +11,7 @@ const firebaseConfig = {
   storageBucket: "phishingchallenge-411da.firebasestorage.app",
   messagingSenderId: "197655798552",
   appId: "1:197655798552:web:d148750e7ed7e3a9a7b46d",
-  measurementId: "G-S8Y0KC5CYV"
+  measurementId: "G-S8Y0KC5CYV",
 };
 
 // Initialize Firebase
@@ -21,3 +21,4 @@ const app = initializeApp(firebaseConfig);
 export default app;
 export const auth = getAuth(app);
 export const database = getDatabase(app);
+export const KEY = firebaseConfig.GEMINI_KEY;
