@@ -41,11 +41,27 @@
 
 .card {
   max-width: 60%;
-  min-width: 100px;
-  min-height: 100px;
+  min-width: 300px;
+  min-height: 300px;
   margin: 2rem auto;
   padding: 2rem;
   text-align: center;
+  align-content: center;
+  border: 4px solid black;
+  border-radius: 1rem;
+  background-color: white;
+  box-shadow: 0 0 1rem #000000aa;
+  color: black;
+  display:inline-block;
+}
+
+.card2 {
+  max-width: 60%;
+  min-width: 300px;
+  min-height: 300px;
+  margin: 2rem auto;
+  padding: 2rem;
+  text-align: left;
   align-content: center;
   border: 4px solid black;
   border-radius: 1rem;
